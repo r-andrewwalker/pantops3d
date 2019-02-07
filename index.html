@@ -46,8 +46,15 @@
       <ul class="dropdown-menu">
           <li><a role="button" data-target="#panelSettings" aria-haspopup="true"><span
             class="glyphicon glyphicon-cog"></span> Visualize Proximity</a></li>
-      <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span
+          <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span
               class="glyphicon esri-icon-filter"></span> Filter Buildings</a></li>
+          <li><a role="button" data-target="#panelViews" aria-haspopup="true"><span
+                class="glyphicon esri-icon-collection"></span> Data Views</a></li>
+              
+
+
+
+
         <li class="active"><a class="hidden-md hidden-lg" href="#mapTab"
             aria-controls="mapTab" role="tab" data-toggle="tab"> Map</a></li>
         <li><a class="hidden-md hidden-lg" href="#sceneTab" aria-controls="sceneTab"
@@ -195,6 +202,32 @@
       </div>
 
 
+      <!-- Data Views -->
+
+      <div id="panelViews" class="panel panel-map collapse">
+        <div id="headingViews" class="panel-heading" >
+          <div class="panel-title">
+            <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseViews"  aria-expanded="true" aria-controls="collapseViews"><span class="glyphicon esri-icon-collection" aria-hidden="true"></span><span class="panel-label"> Data Views</span></a> 
+            <a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelViews"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
+          </div>
+        </div>
+        <div id="collapseViews" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingViews">
+          <div class="panel-body">
+              Use the options below to visualize the buildings layer.
+            <br><br> Characteristic:
+            <select id="view-type">
+                    <option value="zoning" data-textcolor="calcite-text-light"
+                    data-bgcolor="calcite-bg-dark" selected>Zoning</option>
+            </select>
+            
+            <br><br><button id="view-buildings" style="color: black">Apply</button>
+            <br>
+            <div id="results"></div>
+          </div>
+       </div>
+      </div>
+
+
 
   </div>
   <!-- /.calcite-panels -->
@@ -283,6 +316,9 @@
        var ecTypeSelect = document.getElementById("ec-type");
        var filterBuildingsButton = document.getElementById("query-buildings");
 
+       var dataViewSelect = document.getElementById("view-type");
+       var dataViewButton = document.getElementById("view-buildings");
+
 
        var zoningTypes = ['----', 'Neighborhood Model District', 'R6 Residential', 'Planned Development Shopping Center', 'City of Charlottesville', 'R1 Residential', 'Planned Development Mixed Commercial', 'Light Industry', 'C1 Commercial', 'Highway Commercial', 'R4 Residential', 'R10 Residential', 'Commercial Office', 'R15 Residential', 'Planned Residential Development ', 'Rural Areas'];
        var ecTypes = ['----', 'Yes', 'No'];
@@ -314,6 +350,297 @@
                }
            }
        };
+
+
+       // DATA VIEWS
+       var zoningSymbols = {
+
+        'Highway Commercial' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "blue"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Planned Development Shopping Center' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#FF00FF"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Neighborhood Model District' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "orange"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'R6 Residential' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "pink"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'R1 Residential' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "green"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Planned Development Mixed Commercial' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#00FFFF"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Light Industry' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#FFD700"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'C1 Commercial' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#1E90FF"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'R4 Residential' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#F08080"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'R10 Residential' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#DDA0DD"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Commercial Office' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#6A5ACD"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        },
+
+        'Planned Residential Development ' : {
+        type: "mesh-3d", 
+        symbolLayers: [{
+          type: "fill", 
+          material: {
+            color: "#FF4500"
+          },
+          edges: {
+            type: "sketch",
+            color: [0, 0, 0, 0.8],
+            size: 1,
+            extensionLength: 10
+          }
+        }]
+        }
+
+
+      };
+
+       var rendererViewZoning = {
+        type: "unique-value", // autocasts as new UniqueValueRenderer()
+        defaultSymbol: {
+            type: "mesh-3d",
+            symbolLayers: [{
+            type: "fill",
+            material: {
+                color: "#ffffff",
+                colorMixMode: "replace"
+            },
+            edges: {
+                    type: "sketch",
+                    color: [0, 0, 0, 0.8],
+                    size: 1,
+                    extensionLength: 10
+                }
+            }]
+        },
+        defaultLabel: "Other",
+        field: "Zoning",
+        uniqueValueInfos: [{
+          value: "Highway Commercial",
+          symbol: zoningSymbols['Highway Commercial'],
+          label: "Highway Commercial"
+        }, {
+          value: 'Planned Development Shopping Center',
+          symbol: zoningSymbols['Planned Development Shopping Center'],
+          label: 'Planned Development Shopping Center'
+        }, {
+          value: 'Neighborhood Model District',
+          symbol: zoningSymbols['Neighborhood Model District'],
+          label: 'Neighborhood Model District'
+        }, {
+          value: 'R6 Residential',
+          symbol: zoningSymbols['R6 Residential'],
+          label: 'R6 Residential'
+        }, {
+          value: 'R1 Residential',
+          symbol: zoningSymbols['R1 Residential'],
+          label: 'R1 Residential'
+        }, {
+          value: 'Planned Development Mixed Commercial',
+          symbol: zoningSymbols['Planned Development Mixed Commercial'],
+          label: 'Planned Development Mixed Commercial'
+        }, {
+          value: 'Light Industry',
+          symbol: zoningSymbols['Light Industry'],
+          label: 'Light Industry'
+        }, {
+          value: 'C1 Commercial',
+          symbol: zoningSymbols['C1 Commercial'],
+          label: 'C1 Commercial'
+        }, {
+          value: 'R4 Residential',
+          symbol: zoningSymbols['R4 Residential'],
+          label: 'R4 Residential'
+        }, {
+          value: 'R10 Residential',
+          symbol: zoningSymbols['R10 Residential'],
+          label: 'R10 Residential'
+        }, {
+          value: 'R15 Residential',
+          symbol: zoningSymbols['R10 Residential'],
+          label: 'R15 Residential'
+        }, {
+          value: 'Commercial Office',
+          symbol: zoningSymbols['Commercial Office'],
+          label: 'Commercial Office'
+        }, {
+          value: 'Planned Residential Development ',
+          symbol: zoningSymbols['Planned Residential Development '],
+          label: 'Planned Residential Development '
+        }
+
+        
+        ]
+
+
+
+
+        //visualVariables: [{
+         // type: "size",
+          //field: "ELEVATION",
+          //valueUnit: "feet" // Converts and extrudes all data values in feet
+        //}]
+      };
+
+
+
+
+
 
 
 
@@ -594,6 +921,15 @@
       filterBuildings();
 
     });
+
+    dataViewButton.addEventListener("click", function () {
+
+        console.log(dataViewSelect.value);
+
+        sceneLayer.renderer = rendererViewZoning ;
+
+
+        });
 
 
     addToSelect(ecTypeSelect, ecTypes);
